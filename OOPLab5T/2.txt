@@ -1,0 +1,67 @@
+#include <iostream>
+#include <conio.h>
+#include <Windows.h>
+using namespace std;
+
+class BaseRoom {    // базовий клас
+public:
+    BaseRoom(int square) :m_nSquare(square) {}  // конструктор
+    BaseRoom(const BaseRoom& baseroom)        // конструктор копіювання
+    {
+        m_nSquare = baseroom.GetSquare();
+    }
+    virtual ~BaseRoom(void) {}  // деструктор 
+    int GetSquare(void)const { return m_nSquare; } // повертає значення площі
+protected:
+    int m_nSquare; // властивість 'площа' спільне для всіх приміщень не важливо кухня чи спальна кімната
+};
+
+class LivingRoom : public BaseRoom // клас кімнати наслідує интефейс и свойства от базового класса
+{
+public:
+    LivingRoom(int square) :BaseRoom(square) {} // конструктор
+    virtual ~LivingRoom(void) {} // деструктор 
+};
+
+class Kitchen : public BaseRoom // класс кухня наслідує інтефейс і властивості від базового класу
+{
+public:
+    Kitchen(int square) :BaseRoom(square) {} // конструктор
+    virtual ~Kitchen(void) {} // деструктор 
+};
+
+class OneRoomApartment // клас однокімнатна квартира
+{
+public:
+    OneRoomApartment(int floor, Kitchen kitchen, LivingRoom livingRoom) // конструктор
+        :m_nFloor(floor)
+    {
+        FKitchen = new Kitchen(kitchen); // створення об'єктів кухня й кімната
+        FLivingRoom = new LivingRoom(livingRoom);
+    };
+    friend ostream& operator<<(ostream& os, const OneRoomApartment& apartament) //перегрузка оператора '<<' 
+    {
+        return os << "Поверх: " << apartament.m_nFloor << endl
+            << "Площа кухні(м^2): " << apartament.FKitchen->GetSquare() << endl
+            << "Площа Вітальні(м^2): " << apartament.FLivingRoom->GetSquare() << endl;
+    }
+    virtual ~OneRoomApartment(void) // деструктор 
+    {
+        delete FKitchen; // очищення пам'яті
+        delete FLivingRoom;
+    };
+protected:
+    int m_nFloor;     //властивість 'етаж' 
+    Kitchen* FKitchen;//вказівник на об'єкт кухня
+    LivingRoom* FLivingRoom;//вказівник на об'єкт кімната
+};
+
+
+int main(void)
+{
+    SetConsoleOutputCP(1251);
+    OneRoomApartment OneRoom(8, (Kitchen)30, (LivingRoom)46);
+    cout << OneRoom;
+
+    return 0;
+}

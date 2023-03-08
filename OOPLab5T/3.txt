@@ -1,0 +1,66 @@
+#include <string>
+#include <iostream>
+using namespace std;
+
+class SportGame {
+public:
+    SportGame() = default;
+    SportGame(const string& name, int year, int numPlayers)
+        : name_(name), year_(year), numPlayers_(numPlayers) {}
+    virtual ~SportGame() = default;
+
+    virtual void play() const = 0;
+    virtual void print(ostream& os) const {
+        os << name_ << " (" << year_ << ")";
+    }
+    virtual void read(istream& is) {
+        is >> name_ >> year_;
+    }
+
+    SportGame(const SportGame& other) = default;
+    SportGame(SportGame&& other) = default;
+    SportGame& operator=(const SportGame& other) = default;
+    SportGame& operator=(SportGame&& other) = default;
+
+protected:
+    string name_;
+    int year_;
+    int numPlayers_;
+};
+class Football : public SportGame {
+public:
+    Football() = default;
+    Football(const string& name, int year, int numPlayers)
+        : SportGame(name, year, numPlayers) {}
+
+    void play() const override {
+        cout << "Playing football with " << numPlayers_ << " players\n";
+    }
+
+    void print(ostream& os) const override {
+        SportGame::print(os);
+        os << " - football";
+    }
+
+    void read(std::istream& is) override {
+        SportGame::read(is);
+        is >> numPlayers_;
+    }
+
+    Football(const Football& other) = default;
+    Football(Football&& other) = default;
+    Football& operator=(const Football& other) = default;
+    Football& operator=(Football&& other);
+
+
+    friend ostream& operator<<(ostream& os, const SportGame& game) {
+        game.print(os);
+        return os;
+    }
+};
+int main() {
+    Football game("World Cup", 2022, 11);
+    cout << game << endl;
+    game.play();
+    return 0;
+}

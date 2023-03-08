@@ -1,0 +1,99 @@
+#include <conio.h> 
+#include <iostream> 
+#include <string>
+
+using namespace std;
+
+class student
+{
+private:
+    string name;
+    int kurs, id;
+
+public:
+    student()
+    {
+        name = "Bestanchuk Bohdan Volodymyrovich ";
+        kurs = 3;
+        id = 90431;
+    }
+
+    student(string nm, int kr, int ident)
+    {
+
+        name = nm;
+        kurs = kr;
+        id = ident;
+    }
+
+    ~student()
+    {
+        //delete [] nm;                    
+    }
+
+    void print()
+    {
+        cout << endl << "Full name: " << name << endl;
+        cout << "course: " << kurs << endl;
+        cout << "ID  : " << id << endl << "-------------" << endl;
+    }
+};
+
+
+
+
+class student_1 : public student
+{
+private:
+    string tema;
+
+public:
+    student_1() : student()
+    {
+        tema = "Creating of online-shop";
+    };
+
+
+    student_1(string nm, int kr, int ident, string tem) : student(nm, kr, ident)
+    {
+        tema = tem;
+    }
+
+    ~student_1()
+    {
+        //delete [] tema;       
+    }
+
+    void print()
+    {
+        cout << endl << "Theme: " << tema;
+        student::print();
+    }
+
+};
+
+int main(int argc, char* argv[])
+{
+
+    int kr, ident;
+    string nm, tema;
+
+    cout << "Full name: ";
+    getline(std::cin, nm);
+    cout << "Enter the number of course: ";
+    cin >> kr;
+    cout << "Enter ID: ";
+    cin >> ident;
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "Theme of the diploma:  ";
+    getline(std::cin, tema);
+
+    student_1 a;
+    student_1 b(nm, kr, ident, tema);
+
+    a.print();
+    b.print();
+
+    return 0;
+}
